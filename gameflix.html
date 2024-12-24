@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de Jogos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome para o ícone de lupa -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('https://img.freepik.com/free-vector/modern-futuristic-black-red-esport-background_331749-854.jpg'); /* Background com imagem */
+            background-size: cover; /* Faz a imagem cobrir todo o espaço da página */
+            background-position: center; /* Centraliza a imagem no fundo */
+            background-attachment: fixed; /* Fixa o background para não rolar junto com o conteúdo */
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden; /* Impede a rolagem horizontal */
+        }
+
+        /* Estilo para o banner */
+        .banner {
+            width: 57%; /* A largura do banner será 57% da largura da tela */
+            height: auto; /* Altura proporcional à largura */
+            margin: 20px auto; /* Centraliza o banner horizontalmente */
+            display: block; /* Garante que o banner ocupe uma linha inteira */
+        }
+
+        /* Estilo para a barra de pesquisa */
+        .search-bar {
+            margin: 20px auto;
+            text-align: center;
+            position: relative;
+            width: 50%; /* Define uma largura fixa para a caixa de pesquisa */
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 2px solid #ff0000; /* Borda vermelha */
+            background-color: #333;
+            color: white;
+        }
+
+        .search-bar button {
+            position: absolute;
+            right: 10px; /* Alinha a lupa à direita dentro da caixa de pesquisa */
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Container dos posters */
+        .container {
+            display: flex;
+            flex-wrap: wrap; /* Permite a quebra de linha e ajuste dos posters */
+            justify-content: center; /* Centraliza os posters */
+            gap: 20px; /* Espaçamento entre os posters */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Estilo dos posters */
+        .poster-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .poster {
+            width: 200px; /* Largura fixa do poster */
+            height: 300px; /* Altura fixa do poster */
+            border: 4px solid white; /* Borda branca ao redor do poster */
+            border-radius: 8px;
+            background-size: cover; /* Faz a imagem cobrir o espaço do poster sem distorção */
+            background-position: center; /* Centraliza a imagem */
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); /* Sombra ao redor dos posters */
+        }
+
+        .poster:hover {
+            transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+        }
+
+        .poster-name {
+            color: red; /* Cor vermelha para o nome do jogo */
+            margin-top: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Estilo para a barra de rolagem */
+        .container::-webkit-scrollbar {
+            height: 10px; /* Altura da barra de rolagem */
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: red; /* Cor da barra de rolagem */
+            border-radius: 4px;
+        }
+
+        .container::-webkit-scrollbar-track {
+            background: #333; /* Cor de fundo da barra de rolagem */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Banner com tamanho ajustado -->
+    <img class="banner" src="https://i.ibb.co/d7bbfJ1/Gameflix-23-12-2024.png" alt="Gameflix Banner">
+
+    <!-- Barra de pesquisa com ícone de lupa -->
+    <div class="search-bar">
+        <input type="text" placeholder="Pesquise por jogos..." id="search" oninput="searchGames()">
+        <button onclick="searchGames()"><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="container">
+        <!-- Os posters serão inseridos aqui via JavaScript -->
+    </div>
+
+    <script>
+        // Array com o link de imagem para todos os posters e os nomes dos jogos
+        const posters = [
+            { image: 'https://i3.imageban.ru/out/2021/12/31/7b4fae0cb0a8fa800bc02c17c9b6af9b.jpg', name: 'Grand Theft Auto V', url: 'magnet:?xt=urn:btih:61806BEBF64F31F4ED9FBDC0D963CD62214CF7CB&dn=Grand+Theft+Auto+V+%28v1.0.3095%2F1.68+%2B+NVE+Platinum+Modpack+%2B+Bonus+OSTs%2C+MULTi13%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+49.2+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i2.imageban.ru/out/2024/06/03/2b13314daa31cca45608fc36d2555e2f.jpg', name: 'The Genesis Order', url: 'magnet:?xt=urn:btih:D01F7345C6342452EAAFF08683748C46B5045216&dn=The+Genesis+Order+%28v1.00%2FRelease%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+2.9+GB%5D&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i3.imageban.ru/out/2024/11/16/5f862a7ab4a96f3aa94fd55063f4f4f2.jpg', name: 'Assassin’s Creed Mirage', url: 'magnet:?xt=urn:btih:BB2BC4624F1D63FF9C78F802FEB42431B1184490&dn=Assassin%26%23039%3Bs+Creed+Mirage%3A+Master+Assassin+Edition+%28v1.0.6+%2B+All+DLCs+%2B+Bonus+Content%2C+MULTi14%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+18.3+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i4.imageban.ru/out/2023/03/29/85b51d35b80313e95e7973d26df91f7f.jpg', name: 'The Last of Us: Part I', url: 'magnet:?xt=urn:btih:6A4747DD9819515BD3D480D03771D3FD017EDCE1&dn=The+Last+of+Us%3A+Part+I+-+Digital+Deluxe+Edition+%28v1.1.3+%2B+2+DLCs+%2B+Bonus+Content%2C+MULTi24%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+38.8+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i7.imageban.ru/out/2024/10/05/66674de690b25b54a7f655c6d8c461a4.jpg', name: 'Nymphomaniac', url: 'magnet:?xt=urn:btih:3D7A53FD7A435C3600E7B552B07C5ADB67021A6F&dn=Nymphomaniac%3A+Sex+Addict+%28v11348+%2B+Windows+7+Fix%2C+MULTi12%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+10.6+GB%5D&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://fitgirl-repacks.site/wp-content/uploads/2024/11/cover_lust-375x372.jpg', name: 'Lust ‘n Dead', url: 'magnet:?xt=urn:btih:78E641A21BE129DC26664A5BEF9F3CF576D58AA0&dn=Lust+%26%23039%3Bn+Dead+%28v1.0.15%2C+MULTi30%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+3.7+GB%5D&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i4.imageban.ru/out/2024/11/21/eaaa0a1f8f8c567aecb565347026eafb.jpg', name: 'S.T.A.L.K.E.R. 2: HOC', url: 'magnet:?xt=urn:btih:027B18BAFA8A204ED54AC4010607BF5002104DF5&dn=S.T.A.L.K.E.R.+2%3A+Heart+of+Chornobyl+-+Deluxe+Edition+%28v1.1.1+%2B+3+DLC%2A+%2B+Bonus+Content%2C+MULTi18%29+%5BFitGirl+Monkey+Repack%2C+Selective+Download+-+from+109+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i8.imageban.ru/out/2024/09/20/043b8d101c3d6fb833cd8494b35e7908.jpg', name: 'God of War: Ragnarök', url: 'magnet:?xt=urn:btih:1D15BD27B1D5053471634205E768C1B9AD73D176&dn=God+of+War%3A+Ragnar%26ouml%3Bk+-+Digital+Deluxe+Edition+%28%2B+All+DLCs%2FBonuses+%2B+6+GB+VRAM+Bypass%2C+MULTi22%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+65.1+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i1.imageban.ru/out/2023/12/07/4045364e148cf4383f193e18b5bf405c.jpg', name: 'Cyberpunk 2077', url: 'magnet:?xt=urn:btih:179B76CFE2760F6B25B280F7D7A9040324460D6C&dn=Cyberpunk+2077%3A+Ultimate+Edition+%28v2.1+%2B+All+DLCs+%2B+Bonus+Content+%2B+REDmod%2C+MULTi19%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+55.4+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i5.imageban.ru/out/2021/11/13/4e9836b6111a572bef2f43048c7ef4c6.jpg', name: 'Forza Horizon 5', url: 'magnet:?xt=urn:btih:20BF4E706A2401F5643AB9F3A030F4DA8B13873B&dn=Forza+Horizon+5%3A+Premium+Edition+%28v1.656.386.0+%2B+58+DLCs+%2B+100%25+Unlock+Save+%2B+Multiplayer%2C+MULTi16%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+73.5+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i8.imageban.ru/out/2024/08/11/d63aaab946e2f5cd9a65f8451e34d0e4.jpg', name: 'One More Night', url: 'magnet:?xt=urn:btih:29E61B455694D7FF50A2CDBA64BF65F073722225&dn=One+More+Night+%28%2B+Windows+7+Fix%29+%5BFitGirl+Repack%5D&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i6.imageban.ru/out/2022/08/13/d8a6e759722f3c703990dcf3765d400b.jpg', name: 'Marvel’s Spider-Man: Remas...', url: 'magnet:?xt=urn:btih:734A16BFC8B94DB65375C577A9CD7B48BE5232A6&dn=Marvel%26rsquo%3Bs+Spider-Man+Remastered+%28v1.812.1.0+%2B+DLC+%2B+SSE+Fix%2C+MULTi21%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+37.6+GB%5D&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.lanta-net.ru%3A2710%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i6.imageban.ru/out/2024/01/26/b719e33f58e7d51372b8eca9ca992802.jpg', name: 'TEKKEN 8', url: 'magnet:?xt=urn:btih:34C891649802945251E92451FFB946B1B62CE853&dn=TEKKEN+8%3A+Ultimate+Edition+%28v1.10.01+%2B+17+DLCs+%2B+Bonus+Soundtrack%2C+MULTi15%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+38.9+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i4.imageban.ru/out/2024/03/31/d15550aaae34c204fbf97fa7e8a85341.jpg', name: 'Bloody Ink', url: 'magnet:?xt=urn:btih:0F34BE0ECCE46B454A625610CE425B31C2E59D5B&dn=Bloody+Ink+%28MULTi7%29+%5BFitGirl+Repack%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i109.fastpic.ru/big/2019/0515/74/1fa110d29a4f3c2bf46e34dc10d9cb74.jpg', name: 'A Plague Tale: Innocence', url: 'magnet:?xt=urn:btih:0D82E3CA378D5190EDC1B5C1FA49F585CA6C37D6' },
+            { image: 'https://i3.imageban.ru/out/2021/11/13/4335e67a7643196e5f4d69d729b3bd7c.jpg', name: 'The Elder Scrolls V Skyrim: AE', url: 'magnet:?xt=urn:btih:055C45BB77D38CC59D17A964FB222078BF25B9A4&dn=The+Elder+Scrolls+V%3A+Skyrim+-+Anniversary+Edition+%28v1.6.318.0.8+%2B+All+DLCs+%2B+CC+Mods+%2B+Bonus+Content%2C+MULTi9%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+9.6+GB%5D&tr=udp%3A%2F%2F46.148.18.250%3A2710&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2730%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2770%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.local%2Fannounce&tr=http%3A%2F%2Fretracker.ip.ncnet.ru%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce' },
+            { image: 'http://i85.fastpic.ru/big/2016/1101/61/263f67e40cb7df23add04736d36ed361.jpg', name: 'The Elder Scrolls V Skyrim: SE', url: 'magnet:?xt=urn:btih:57F74C9682A417156E22B82D8D0767E11BC4158B' },
+            { image: 'http://i73.fastpic.ru/big/2016/0226/b3/3cf72f7adc909a932f73be6dff30dfb3.jpg', name: 'Elder Scrolls V Skyrim: LE', url: 'magnet:?xt=urn:btih:57F74C9682A417156E22B82D8D0767E11BC4158B' },
+            { image: 'https://i4.imageban.ru/out/2024/10/01/c2996eb175b34064090303fcd1455c33.jpg', name: 'Starfield: DPE', url: 'magnet:?xt=urn:btih:B875AB8F81DBE9EF3D20E30C6BA14F28DD36B53F&dn=Starfield%3A+Digital+Premium+Edition+%28v1.14.70.0+%2B+3+DLCs+%2B+Bonus+Artbook+%26amp%3B+OST+%2B+Creations+Mod+Pack+%2B+SFCK%2C+MULTi10%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+66.9+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i1.imageban.ru/out/2024/04/28/1943a3ac000763895f7c0336ec5da773.jpg', name: 'Fallout 4', url: 'magnet:?xt=urn:btih:D10B66EF46E9CED9451C86D6147637210E618277&dn=Fallout+4%3A+Game+of+the+Year+Edition+%28v1.10.980.0+%2B+6+DLCs+%2B+161+CC+Mods+%2B+Creation+Kit+v1.10.943.1+%2B+Bonus+Content%2C+MULTi9%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+23.9+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'http://i103.fastpic.ru/big/2018/0208/eb/a9e816fbc22b6c0c320c504123284eeb.jpg', name: 'Call of Duty: Modern Warfare 3', url: 'magnet:?xt=urn:btih:16781424696B405FC93941B1E95479AEE0C1DF19' },
+            { image: 'https://i7.imageban.ru/out/2022/10/18/79913249ad587bdeaa28e94b4c2c9f84.jpg', name: 'A Plague Tale: Requiem', url: 'magnet:?xt=urn:btih:A20E020B786191A335084C064336A986F114E105&dn=A+Plague+Tale%3A+Requiem+%28v1.0.0.0+Steam%2FGOG+%2B+DLC%2C+MULTi15%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+24.2+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.lanta-net.ru%3A2710%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i6.imageban.ru/out/2023/12/15/e70624a45a9a181efff8060b08751b18.jpg', name: 'Ready or Not: LSPD Bundle', url: 'magnet:?xt=urn:btih:7FBF03CCC9115260DC50102E5A31E83E91422A79&dn=Ready+or+Not%3A+LSPD+Bundle+%28v66884+%2B+4+DLCs%2FBonuses+%2B+Windows+7+Fix%2C+MULTi12%29+%5BFitGirl+Repack%2C+Selective+Download+-+from+34.7+GB%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Fbt2.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fbt1.archive.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.filemail.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker1.bt.moack.co.kr%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://i103.fastpic.ru/big/2018/0907/c7/24c4071d8e26851d6137fa97ad7839c7.jpg', name: '428: Shibuya Scramble', url: 'magnet:?xt=urn:btih:8E55F63044F5CAD16FBC68FCB29C630B71A5E0E7' },
+            { image: 'http://i101.fastpic.ru/big/2018/0902/59/62f50566cccff1a4113f8e193cd1cf59.jpg', name: '303 Squadron: BOF', url: 'magnet:?xt=urn:btih:A68B1757CFA2616E14DA7669604ACCD42DDC4E42' },
+            { image: 'https://i7.imageban.ru/out/2021/10/24/02bc43ee595df9373933cfc50162eeac.jpg', name: '(Chinese Paladin): SAF 7', url: 'magnet:?xt=urn:btih:7C2F38F573260C976F132711CECB60970DCFCC79&dn=Sword+and+Fairy+7+%28v2.0.1%2C+MULTi4%29+%5BFitGirl+Repack%5D&tr=udp%3A%2F%2Fopentor.net%3A6969&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.lanta-net.ru%3A2710%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'http://i97.fastpic.ru/big/2017/1108/d2/dcd330d8eaea69e301aeb223269762d2.jpg', name: '.hack//G.U. Last Recode', url: 'magnet:?xt=urn:btih:864504C72DEDED6E62F9FBEAB00436802D15D0D2' },
+            { image: 'https://i2.imageban.ru/out/2021/07/18/2579c6b89885f27501dbfe2675631ed2.jpg', name: '100% Orange Juice: ASC', url: 'magnet:?xt=urn:btih:B7C892EAECD7E39B769DA7138E5DCE957ACF197C&dn=100%25+Orange+Juice%3A+All+Stars+Collection+%28v3.7+%2B+31+DLCs%2C+MULTi9%29+%5BFitGirl+Repack%5D&tr=udp%3A%2F%2F46.148.18.250%3A2710&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2730%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2770%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.local%2Fannounce&tr=http%3A%2F%2Fretracker.ip.ncnet.ru%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce' },
+            { image: 'https://i1.imageban.ru/out/2024/05/10/bd63a1b27b0b95959fc521b49d8c9cac.jpg', name: '1000xRESIST', url: 'magnet:?xt=urn:btih:F60DA8841E0FAC9F193393189286502E7BFBF605&dn=1000xRESIST+%28v1.15457%2C+ENG%2FCHI%29+%5BFitGirl+Repack%5D&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=http%3A%2F%2Ftracker.gbitt.info%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.ccp.ovh%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.theoks.net%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.tamersunion.org%3A443%2Fannounce&tr=http%3A%2F%2Fopen.acgnxtracker.com%3A80%2Fannounce&tr=http%3A%2F%2Fopen.acgtracker.com%3A1096%2Fannounce&tr=http%3A%2F%2Ftracker.bt4g.com%3A2095%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.openbittorrent.com%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce' },
+            { image: 'https://products.eneba.games/resized-products/MNSEN0s0zRCung81Uzd0RZX_Ix-ypYn25AcMgkVVRtQ_350x200_1x-0.jpeg', name: '112 Operator', url: 'magnet:?xt=urn:btih:A7BDCA3E4246A41717150D9CB96D5C5B5C12477C&dn=112+Operator+%28v.0210429.72w-cb+%2B+5+DLCs%2C+MULTi10%29+%5BFitGirl+Repack%5D&tr=udp%3A%2F%2F46.148.18.250%3A2710&tr=udp%3A%2F%2Fopentor.org%3A2710&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2730%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2770%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.local%2Fannounce&tr=http%3A%2F%2Fretracker.ip.ncnet.ru%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.zer0day.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcoppersurfer.tk%3A6969%2Fannounce' },
+
+        ];
+
+        const container = document.querySelector('.container');
+
+        posters.forEach(poster => {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('poster-wrapper');
+
+            const img = document.createElement('div');
+            img.classList.add('poster');
+            img.style.backgroundImage = `url(${poster.image})`;
+            img.addEventListener('click', () => {
+                window.open(poster.url, '_blank');
+            });
+
+            const name = document.createElement('div');
+            name.classList.add('poster-name');
+            name.textContent = poster.name;
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(name);
+            container.appendChild(wrapper);
+        });
+
+        function searchGames() {
+            const query = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.poster-wrapper').forEach(wrapper => {
+                const name = wrapper.querySelector('.poster-name').textContent.toLowerCase();
+                wrapper.style.display = name.includes(query) ? '' : 'none';
+            });
+        }
+    </script>
+
+</body>
+</html>
