@@ -181,7 +181,7 @@
         renderPosters(posters);
 
         // Carregar dados do JSON e adicionar ao array posters
-        fetch('./data/posters.json')
+        fetch('/data/posters.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erro ao carregar o arquivo JSON');
